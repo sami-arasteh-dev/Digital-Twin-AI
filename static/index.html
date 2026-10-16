@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Digital Twin AI</title>
+<link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">Digital Twin <span>AI</span></div>
+    <button id="newChat" class="primary">＋ گفتگوی جدید</button>
+    <div id="conversationList" class="conversation-list"></div>
+    <div class="side-foot">Local SQLite · Multi Model</div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <div>
+        <div id="chatTitle" class="title">گفتگوی جدید</div>
+        <div id="status" class="muted">آماده</div>
+      </div>
+      <div class="toggles">
+        <label class="toggle"><input id="liveToggle" type="checkbox"><span></span> گفتگوی زنده</label>
+        <label class="toggle"><input id="thoughtToggle" type="checkbox"><span></span> شبکه افکار</label>
+      </div>
+    </header>
+
+    <nav class="tabs">
+      <button data-tab="chat" class="active">گفتگو</button>
+      <button data-tab="history">سوابق</button>
+      <button data-tab="models">تنظیمات مدل</button>
+      <button data-tab="taxonomy">حافظه و درخت</button>
+      <button data-tab="monitor">مانیتورینگ</button>
+    </nav>
+
+    <section id="tab-chat" class="tab active">
+      <div id="messages" class="messages"></div>
+      <div id="thoughts" class="thoughts"></div>
+      <form id="chatForm" class="composer">
+        <div id="fileChips" class="file-chips"></div>
+        <textarea id="messageInput" placeholder="پیام خود را بنویسید..." rows="2"></textarea>
+        <div class="composer-actions">
+          <label class="icon-btn" title="افزودن فایل">📎<input id="fileInput" type="file" multiple accept=".txt,.md,.csv,.json,.log,.docx,.pdf,image/*"></label>
+          <button type="button" id="micBtn" class="icon-btn" title="تبدیل گفتار به متن">🎙️</button>
+          <button class="send primary" type="submit">ارسال</button>
+        </div>
+      </form>
+    </section>
+
+    <section id="tab-history" class="tab"><div id="history" class="panel"></div></section>
+
+    <section id="tab-models" class="tab">
+      <div class="grid2">
+        <div class="panel">
+          <h2>تنظیمات مدل‌ها</h2>
+          <p class="muted">API و نام مدل را دستی وارد کنید. هیچ فایل env الزامی نیست.</p>
+          <form id="modelForm">
+            <input type="hidden" id="modelId">
+            <label>نام نمایشی<input id="modelNameDisplay" required></label>
+            <label>نقش<select id="modelRole"><option value="classifier">Classifier / Router</option><option value="analytical">Analytical</option></select></label>
+            <label>Base URL<input id="baseUrl" placeholder="https://api.gapgpt.app/v1" required></label>
+            <label>API Key<input id="apiKey" type="password" required></label>
+            <label>نام مدل<input id="modelName" placeholder="gapgpt-qwen-3.6" required></label>
+            <div class="grid2">
+              <label>Temperature<input id="temperature" type="number" step=".1" value=".2"></label>
+              <label>Max tokens<input id="maxTokens" type="number" value="4096"></label>
+            </div>
+            <label>Timeout (ثانیه)<input id="timeout" type="number" value="180"></label>
+            <label>Headers اضافی JSON<textarea id="extraHeaders">{}</textarea></label>
+            <label>System prompt اختیاری<textarea id="systemPrompt"></textarea></label>
+            <label class="check"><input id="enabled" type="checkbox" checked> فعال</label>
+            <div class="row"><button class="primary" type="submit">ذخیره مدل</button><button type="button" id="clearModel">پاک کردن فرم</button></div>
+          </form>
+        </div>
+        <div class="panel">
+          <h2>مدل‌های ثبت‌شده</h2>
+          <div id="models"></div>
+          <hr>
+          <h2>فواصل خودکار</h2>
+          <div class="settings-grid">
+            <label>گفتگوی زنده (ثانیه)<input data-setting="live_interval_seconds" type="number"></label>
+            <label>شبکه افکار (ثانیه)<input data-setting="thought_interval_seconds" type="number"></label>
+            <label>عمر حافظه کوتاه‌مدت (ثانیه)<input data-setting="short_term_ttl_seconds" type="number"></label>
+            <label>Timeout فرآیند مستقل<input data-setting="autonomous_timeout_seconds" type="number"></label>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="tab-taxonomy" class="tab">
+      <div class="panel toolbar"><button id="exportJson" class="primary">خروجی JSON</button><span id="taxonomyStats"></span></div>
+      <div id="taxonomyTree" class="tree"></div>
+    </section>
+
+    <section id="tab-monitor" class="tab">
+      <div class="panel toolbar"><button id="refreshLogs">بروزرسانی</button><span>لاگ‌ها بصورت زنده نیز دریافت می‌شوند.</span></div>
+      <pre id="logs" class="logs"></pre>
+    </section>
+  </main>
+</div>
+<script src="/static/app.js"></script>
+</body>
+</html>
